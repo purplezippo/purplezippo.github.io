@@ -1,0 +1,440 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="baidu_union_verify" content="d1952c66cf48912e21c18c7c581f382a">
+  <meta name="360-site-verification" content="67fbcc5a67f4c65c057315b28fa0b2c8" />
+<meta name="google-site-verification" content="2GzxQ0VtXwTSUdmGm6DzcmhTzM_I9QmzCb_pzpMzD88" />
+  
+    <title>shiny server 部署访问密码设置 | ArcData</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="雨禾">
+    
+    <meta name="description" content="1. 安装Apache web server123apt-get install apache2apt-get install aptitudeaptitude install -y build-essential libapache2-mod-proxy-html libxml2-dev
+2. 安">
+    
+    
+    
+    
+    <link rel="alternate" href="atom.xml" title="ArcData" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            var _bdId ='391982416296a0d54221f59fe35250d4';
+             hm.src = "//hm.baidu.com/hm.js?" + _bdId;
+             var s = document.getElementsByTagName("script")[0]; 
+             s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+     
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="ArcData">ArcData</a></h1>
+				<a class="blog-motto">茫茫地疯</a>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">首页</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+					<li>
+					
+                                            <form class="search" action=http://zhannei.baidu.com/cse/search target="_blank">
+                                            <label>Search</label>
+                                        <input name="s" type="hidden" value=  ><input type="text" name="q" size="30" placeholder="搜索"><br>
+					
+					</li>
+				</ul>
+                            </nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/09/24/shiny server 部署访问密码设置/" title="shiny server 部署访问密码设置" itemprop="url">shiny server 部署访问密码设置</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="https://purplezippo.github.io" title="雨禾">雨禾</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2017-09-24T11:16:03.853Z" itemprop="datePublished">2017-09-24</time>
+    更新日期:<time datetime="2017-09-26T00:36:54.593Z" itemprop="dateModified">2017-09-26</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-安装Apache-web-server"><span class="toc-number">1.</span> <span class="toc-text">1. 安装Apache web server</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-安装proxy模块"><span class="toc-number">2.</span> <span class="toc-text">2. 安装proxy模块</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-配置Reverse-Proxy"><span class="toc-number">3.</span> <span class="toc-text">3. 配置Reverse Proxy</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-安装htpasswd"><span class="toc-number">4.</span> <span class="toc-text">4.安装htpasswd</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-添加账户密码"><span class="toc-number">5.</span> <span class="toc-text">5.添加账户密码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-重启服务"><span class="toc-number">6.</span> <span class="toc-text">6.重启服务</span></a></li></ol>
+		</div>
+		
+		<h2 id="1-安装Apache-web-server"><a href="#1-安装Apache-web-server" class="headerlink" title="1. 安装Apache web server"></a>1. 安装Apache web server</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">apt-get install apache2</div><div class="line">apt-get install aptitude</div><div class="line">aptitude install -y build-essential libapache2-mod-proxy-html libxml2-dev</div></pre></td></tr></table></figure>
+<h2 id="2-安装proxy模块"><a href="#2-安装proxy模块" class="headerlink" title="2. 安装proxy模块"></a>2. 安装proxy模块</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">a2enmod</div><div class="line">ssl proxy proxy_ajp proxy_http rewrite deflate headers proxy_balancer proxy_connect proxy_html</div></pre></td></tr></table></figure>
+<h2 id="3-配置Reverse-Proxy"><a href="#3-配置Reverse-Proxy" class="headerlink" title="3. 配置Reverse Proxy"></a>3. 配置Reverse Proxy</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">vim /etc/apache2/sites-enabled/000-default.conf</div></pre></td></tr></table></figure>
+<p>设置为：</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line">&lt;VirtualHost *:<span class="number">80</span>&gt;</div><div class="line">        # The ServerName directive sets the request scheme, <span class="built_in">hostname</span> <span class="built_in">and</span> port that</div><div class="line">        # the server uses <span class="keyword">to</span> identify itself. This <span class="keyword">is</span> used when creating</div><div class="line">        # redirection URLs. In the context of virtual hosts, the ServerName</div><div class="line">        # specifies what <span class="built_in">hostname</span> must appear in the request<span class="string">'s Host: header to</span></div><div class="line"><span class="string">        # match this virtual host. For the default virtual host (this file) this</span></div><div class="line"><span class="string">        # value is not decisive as it is used as a last resort host regardless.</span></div><div class="line"><span class="string">        # However, you must set it for any further virtual host explicitly.</span></div><div class="line"><span class="string">        #ServerName www.example.com</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">        ServerAdmin webmaster@localhost</span></div><div class="line"><span class="string">        DocumentRoot /var/www/html</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">        # Available loglevels: trace8, ..., trace1, debug, info, notice, warn,</span></div><div class="line"><span class="string">        # error, crit, alert, emerg.</span></div><div class="line"><span class="string">        # It is also possible to configure the loglevel for particular</span></div><div class="line"><span class="string">        # modules, e.g.</span></div><div class="line"><span class="string">        #LogLevel info ssl:warn</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">        ErrorLog $&#123;APACHE_LOG_DIR&#125;/error.log</span></div><div class="line"><span class="string">        CustomLog $&#123;APACHE_LOG_DIR&#125;/access.log combined</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">        # For most configuration files from conf-available/, which are</span></div><div class="line"><span class="string">        # enabled or disabled at a global level, it is possible to</span></div><div class="line"><span class="string">        # include a line for only one particular virtual host. For example the</span></div><div class="line"><span class="string">        # following line enables the CGI configuration for this host only</span></div><div class="line"><span class="string">        # after it has been globally disabled with "a2disconf".</span></div><div class="line"><span class="string">        #Include conf-available/serve-cgi-bin.conf</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">        ProxyPreserveHost On</span></div><div class="line"><span class="string">        ProxyPass / http://0.0.0.0:3838/</span></div><div class="line"><span class="string">        ProxyPassReverse / http://0.0.0.0:3838/</span></div><div class="line"><span class="string">        ServerName localhost</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">        &lt;location /&gt;</span></div><div class="line"><span class="string">        AuthType Basic</span></div><div class="line"><span class="string">        AuthName '</span>Restricted Access - Authenticate<span class="string">'</span></div><div class="line"><span class="string">        AuthUserFile /etc/httpd/htpasswd.users</span></div><div class="line"><span class="string">        Require valid-user</span></div><div class="line"><span class="string">        &lt;/location&gt;</span></div><div class="line"><span class="string">&lt;/VirtualHost&gt;</span></div></pre></td></tr></table></figure>
+<p>其中<code>&lt;location /&gt;&lt;/location&gt;</code>部分设定apache通过基础授权的方式提供web服务</p>
+<h2 id="4-安装htpasswd"><a href="#4-安装htpasswd" class="headerlink" title="4.安装htpasswd"></a>4.安装htpasswd</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo apt-get install apache2-utils</div></pre></td></tr></table></figure>
+<h2 id="5-添加账户密码"><a href="#5-添加账户密码" class="headerlink" title="5.添加账户密码"></a>5.添加账户密码</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mkdir /etc/httpd</div><div class="line">htpasswd -bc /etc/httpd/htpasswd.users muscle 123456</div></pre></td></tr></table></figure>
+<p>其中muscle为账户名，123456为密码。-c 命令htpassed创建新的用户文件，当用户文件已经创建时把c去掉任然调用上述语句可以追加新的用户。</p>
+<h2 id="6-重启服务"><a href="#6-重启服务" class="headerlink" title="6.重启服务"></a>6.重启服务</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">/etc/init.d/apache2 restart</div></pre></td></tr></table></figure>
+<p>此时访问网站将需要通过账号密码。</p>
+<p>参考链接：</p>
+<ul>
+<li><a href="http://ipub.com/shiny-https/" target="_blank" rel="external">http://ipub.com/shiny-https/</a></li>
+<li><a href="http://ipub.com/shiny-password-protect/" target="_blank" rel="external">http://ipub.com/shiny-password-protect/</a></li>
+</ul>
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/shiny/">shiny</a>
+  </div>
+
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/R/">R</a>
+</div>
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="https://purplezippo.github.io/2017/09/24/shiny server 部署访问密码设置/" data-title="shiny server 部署访问密码设置 | ArcData" data-tsina="" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+	
+<section class="comment">
+	
+	<div class="ds-thread" data-title="shiny server 部署访问密码设置" data-thread-key="shiny server 部署访问密码设置" data-author-key="雨禾" data-url="https://purplezippo.github.io/post/shiny server 部署访问密码设置"></div>
+	
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-安装Apache-web-server"><span class="toc-number">1.</span> <span class="toc-text">1. 安装Apache web server</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-安装proxy模块"><span class="toc-number">2.</span> <span class="toc-text">2. 安装proxy模块</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-配置Reverse-Proxy"><span class="toc-number">3.</span> <span class="toc-text">3. 配置Reverse Proxy</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-安装htpasswd"><span class="toc-number">4.</span> <span class="toc-text">4.安装htpasswd</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-添加账户密码"><span class="toc-number">5.</span> <span class="toc-text">5.添加账户密码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-重启服务"><span class="toc-number">6.</span> <span class="toc-text">6.重启服务</span></a></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+<div id="authorInfo">
+	
+		<div class="author-logo"></div>		
+	
+	<div class="social-list" class="clearfix">
+		
+		
+		
+		<a href="https://github.com/purplezippo" target="_blank" title="github"></a>
+		
+		
+		
+	</div>
+</div>
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+			<li><a href="/categories/R/" title="R">R<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/shiny/" title="shiny">shiny<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+      <li><a href="http://hexo.io" target="_blank" title="Hexo">Hexo</a></li>
+      <li><a href="http://gengbiao.me" target="_blank" title="coney">coney's Blog</a></li>
+    </ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+  
+  <div class="tagcloudlist">
+    <p class="asidetitle">标签云</p>
+    <div class="tagcloudlist clearfix">
+       <a href="/tags/shiny/" style="font-size: 10px;">shiny</a>
+    </div>
+  </div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+    
+            <p class="copyright"> © 2017 
+		
+		<a href="https://purplezippo.github.io" target="_blank" title="雨禾">雨禾</a>
+		
+            && Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> && Theme by <a href="http://gengbiao.me" target="_blank" title="coney">coney</a>
+            </div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:""};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+<script>
+    
+        var _bdImg = '4';
+    
+    window._bd_share_config={
+        "common":{
+            "bdSnsKey":{
+
+            },
+            "bdText":"",
+            "bdMini":"2",
+            "bdMiniList":[
+                "qzone",
+                "tsina",
+                "weixin",
+                "renren",
+                "tqq",
+                "tieba",
+                "douban",
+                "sqq",
+                "diandian",
+                "huaban",
+                "youdao",
+                "mail",
+                "ty",
+                "fbook",
+                "twi",
+                "linkedin",
+                "copy",
+                "print"
+            ],
+            "bdPic":"",
+            "bdStyle":"0",
+            "bdSize":"16"
+        },
+        "slide":{
+            "type":"slide",
+            "bdImg":_bdImg,
+            "bdPos":"right",
+            "bdTop":"350"
+        },
+        "image":{
+            "viewList":[
+                "weixin",
+                "qzone",
+                "tsina",
+                "renren",
+                "douban",
+                "tqq"
+            ],
+            "viewText":"分享：",
+            "viewSize":"16"
+        },
+        "selectShare":{
+            "bdContainerClass":null,
+            "bdSelectMiniList":[
+                "weixin",
+                "qzone",
+                "tsina",
+                "renren",
+                "douban",
+                "tqq"
+            ]
+        }
+    };
+    with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+
+
+
+
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', '', '');  
+ga('send', 'pageview');
+</script>
+
+
+  </body>
+</html>
+
